@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Hi, {{ current_user.username }}!</h1>
+    {% for episode in episodes %}
+    <div>
+        <p>{{ episode.title }} </b></p>
+    </div>
+    {% endfor %}
+{% endblock %}

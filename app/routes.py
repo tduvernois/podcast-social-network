@@ -25,7 +25,16 @@ def index():
     # ]
     podcasts = Podcast.query.all();
     form = EmptyForm()
-    return render_template('index.html', title='Home', podcasts=podcasts, form=form)
+    form_podcast_details = EmptyForm()
+    return render_template('index.html', title='Home', podcasts=podcasts, form=form, form_podcast_details=form_podcast_details)
+
+
+@app.route('/podcast/<id>')
+@login_required
+def podcast_detail(id):
+    podcast = Podcast.query.get(id)
+    episodes = podcast.get_all_episodes()
+    return render_template('podcast.html', title='Podcast', podcast=podcast, episodes=episodes)
 
 
 @app.route('/login', methods=['GET', 'POST'])

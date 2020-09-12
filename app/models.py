@@ -4,7 +4,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login
 
-
 userPodcast = db.Table('UserPodcast',
                        db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
                        db.Column('podcast_id', db.Integer, db.ForeignKey('podcast.id'), primary_key=True)
@@ -53,12 +52,24 @@ class Podcast(db.Model):
                             # primaryjoin=(userPodcast.c.podcast_id == id),
                             # backref=db.backref('podcasts')
                             )
+    episodes = db.relationship('Episode', backref='podcast', lazy=True)
+
+    def number_of_followers(self):
+        return self.users.count()
+
+    def get_all_episodes(self):
+        return self.episodes
 
     def __repr__(self):
         return '<Podcast {}>'.format(self.body)
 
-    def number_of_followers(self):
-        return self.users.count()
+
+class Episode(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(140))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    podcast_id = db.Column(db.Integer, db.ForeignKey('podcast.id'),
+                           nullable=False)
 
 
 @login.user_loader

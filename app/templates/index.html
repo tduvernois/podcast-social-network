@@ -6,6 +6,11 @@
     <div>
         <p>{{ podcast.author }} : <b>{{ podcast.body }}</b></p>
         <p>{{ podcast.number_of_followers() }}</p>
+
+                <form action="{{ url_for('podcast_detail', id=podcast.id) }}" method="get">
+            {{ form_podcast_details.hidden_tag() }}
+            {{ form_podcast_details.submit(value='Details') }}
+        </form>
     </div>
     <p>
         {% if not current_user.is_following(podcast) %}
