@@ -1,10 +1,43 @@
 {% extends "base.html" %}
 
 {% block content %}
+<head>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'><link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+
+</head>
+<body>
     <h1>Hi, {{ current_user.username }}!</h1>
     {% for episode in episodes %}
     <div>
         <p>{{ episode.title }} </b></p>
+
+        <div class="audio-player">
+            <div id={{ "play-btn" ~ episode.id }}></div>
+                <div class="audio-wrapper" id={{ "player-container" ~ episode.id }} href="javascript:;">
+                  <audio id={{ "player" ~ episode.id }} ontimeupdate="initProgressBar({{ episode.id }})">
+                          <source src={{ episode.audio_link }} type="audio/mp3">
+                  </audio>
+                </div>
+                <div class="player-controls scrubber">
+                  <p>Oslo <small>by</small> Holy Esque</p>
+                  <span id="seekObjContainer">
+                      <progress id={{ "seekObj" ~ episode.id }} value="0" max="1"></progress>
+                  </span>
+                  <br>
+                  <small style="float: left; position: relative; left: 15px;" class={{ "start-time" ~ episode.id }}></small>
+                  <small style="float: right; position: relative; right: 20px;" class={{ "end-time" ~ episode.id }}></small>
+                </div>
+            <div class="album-image" style="background-image: url('https://media.npr.org/assets/img/2018/08/03/npr_hibt_podcasttile_sq-98320b282169a8cea04a406530e6e7b957665b3f-s700-c85.jpg')"></div>
+        </div>
+        <!-- partial -->
     </div>
+
     {% endfor %}
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script><script  src="{{url_for('static', filename='script.js')}}"></script>
+    <script>
+        //console.log(jQuery('#player-container').length)
+        initPlayers($('[id^=player-container]').length)
+    </script>
+</body>
+
 {% endblock %}
