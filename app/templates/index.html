@@ -1,29 +1,40 @@
 {% extends "base.html" %}
 
 {% block content %}
+<head>
+  <link rel="stylesheet" href="{{url_for('static', filename='index.css')}}">
+
+</head>
+<body>
     <h1>Hi, {{ current_user.username }}!</h1>
     {% for podcast in podcasts %}
     <div>
         <p>{{ podcast.author }} : <b>{{ podcast.body }}</b></p>
         <p>{{ podcast.number_of_followers() }}</p>
+        <div class='parent'>
+          <div class='child inline-block-child'>
+                              <form action="{{ url_for('podcast_detail', id=podcast.id) }}" method="get">
+                    {{ form_podcast_details.hidden_tag() }}
+                    {{ form_podcast_details.submit(value='Details') }}
+                </form>
+          </div>
+          <div class='child inline-block-child'>{% if not current_user.is_following(podcast) %}
+                <form action="{{ url_for('follow', id=podcast.id) }}" method="post">
+                    {{ form.hidden_tag() }}
+                    {{ form.submit(value='Follow') }}
+                </form>
+                {% else %}
+                <form action="{{ url_for('unfollow', id=podcast.id) }}" method="post">
+                    {{ form.hidden_tag() }}
+                    {{ form.submit(value='Unfollow') }}
+                </form>
+                {% endif %}
+          </div>
+        </div>
 
-                <form action="{{ url_for('podcast_detail', id=podcast.id) }}" method="get">
-            {{ form_podcast_details.hidden_tag() }}
-            {{ form_podcast_details.submit(value='Details') }}
-        </form>
     </div>
-    <p>
-        {% if not current_user.is_following(podcast) %}
-        <form action="{{ url_for('follow', id=podcast.id) }}" method="post">
-            {{ form.hidden_tag() }}
-            {{ form.submit(value='Follow') }}
-        </form>
-        {% else %}
-        <form action="{{ url_for('unfollow', id=podcast.id) }}" method="post">
-            {{ form.hidden_tag() }}
-            {{ form.submit(value='Unfollow') }}
-        </form>
-        {% endif %}
+
     </p>
     {% endfor %}
+    </body>
 {% endblock %}
