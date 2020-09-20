@@ -54,6 +54,7 @@ class Podcast(db.Model):
                             )
     episodes = db.relationship('Episode', backref='podcast', lazy=True)
     image = db.Column(db.String(500))
+    description = db.Column(db.String(5000))
 
     def number_of_followers(self):
         return self.users.count()
@@ -73,6 +74,7 @@ class Episode(db.Model):
                            nullable=False)
     audio_link = db.Column(db.String(500))
     description = db.Column(db.String(5000))
+    image = db.Column(db.String(500))
 
 
 @login.user_loader

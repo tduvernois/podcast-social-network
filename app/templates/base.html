@@ -7,7 +7,7 @@
         {% endif %}
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     </head>
-    <body>
+    <body style="background-color: #F9F9F9">
         <div>
             podcast network:
              <a href="{{ url_for('index') }}">Home</a>
@@ -27,6 +27,11 @@
         </ul>
         {% endif %}
         {% endwith %}
-        {% block content %}{% endblock %}
+        <div style="margin-left:5%;margin-right:15%">
+            <div style="margin-left:5%">
+            {% block content %}{% endblock %}
+        </div>
+        </div>
+
     </body>
 </html>

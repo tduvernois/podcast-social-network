@@ -1,0 +1,171 @@
+html {
+  height: 100%;
+}
+
+.audio-player {
+  background: white;
+  border: 1px solid #dfdfdf;
+  width: 50vw;
+  text-align: center;
+  display: flex;
+  flex-flow: row;
+  margin: 25px auto 0rem auto;
+}
+.audio-player .album-image {
+  background-size: cover;
+      width: 40%;
+    height: auto;
+}
+.audio-player .player-controls {
+  align-items: center;
+  justify-content: center;
+  margin-top: 2.5rem;
+  flex: 3;
+}
+.audio-player .player-controls progress {
+  width: 90%;
+}
+.audio-player .player-controls progress[value] {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: white;
+  color: blue;
+  height: 5px;
+}
+.audio-player .player-controls progress[value]::-webkit-progress-bar {
+  background-color: white;
+  border-radius: 2px;
+  border: 1px solid #dfdfdf;
+  color: blue;
+}
+.audio-player .player-controls progress::-webkit-progress-value {
+  background-color: blue;
+}
+.audio-player .player-controls p {
+  font-size: 13px;
+}
+
+div[id^='play-btn'], div[id*='play-btn'] {
+   background-image: url("http://www.lukeduncan.me/images/play-button.png");
+  background-size: cover;
+  width: 75px;
+  height: 75px;
+  margin: 2rem 0 2rem 2rem;
+  }
+
+.inline-block-child {
+  display: inline-block;
+}
+
+.inline-block-child-1 {
+  display: inline-block;
+}
+
+.image {
+  min-height: 200px;
+  width: 200px;
+  vertical-align: baseline;
+  margin-left: 50px;
+  margin-right: 20px;
+
+}
+
+#result {
+    margin-left: 5%;
+    width: 60%;
+    vertical-align: top;
+}
+
+.followers {
+  height: 5px;
+  font-size:11px;
+}
+
+#description {
+    width: 50%;
+    word-wrap: break-word;
+    vertical-align: top;
+    margin-left: 5%;
+
+}
+
+.block {
+    border-bottom: 1px solid #ccc;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    margin-bottom: 40px;
+
+}
+
+.header {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5%;
+}
+
+.section {
+    margin-right: 335px;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+}
+
+
+.before-section {
+    background-color: #F9F9F9;
+}
+
+.podcast-name {
+    font-family:"Gotham SSm, Helvetica, Arial, sans-serif";
+    font-size: 36px;
+    line-height: 40px;
+}
+
+.episodes {
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.recent-episodes {
+    margin-top: 10px;
+    font-family:"Knockout 31 4r, HelveticaNeue-CondensedBold, Helvetica, Arial, sans-serif";
+    font-size:16px;
+    line-height:18px;
+    color: #e82100;
+}
+
+.episode-name {
+    font-family:"Gotham SSm, Helvetica, Arial, sans-serif";
+    font-size:16px;
+    line-height:18px;
+    color:#000017;
+}
+
+.episode-date {
+    font-family:"Gotham SSm, Helvetica, Arial, sans-serif";
+    font-size:12px;
+    line-height:12px;
+    color:#636363;
+    margin-bottom: 5px;
+
+}
+
+.episode {
+    margin-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.episode-description {
+    font-family:"Gotham SSm, Helvetica, Arial, sans-serif";
+    font-size:15px;
+    line-height:15px;
+    color:#767676;
+}

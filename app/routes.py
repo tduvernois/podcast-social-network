@@ -34,7 +34,10 @@ def index():
 def podcast_detail(id):
     podcast = Podcast.query.get(id)
     episodes = podcast.get_all_episodes()
-    return render_template('podcast.html', title='Podcast', podcast=podcast, episodes=episodes)
+    form = EmptyForm()
+    form_podcast_details = EmptyForm()
+    return render_template('podcast.html', title='Podcast', podcast=podcast, episodes=episodes, form=form,
+                           form_podcast_details=form_podcast_details)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -71,7 +74,6 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
@@ -84,11 +86,10 @@ def follow(id):
         podcast = Podcast.query.filter_by(id=id).first()
         if podcast is None:
             flash('Podcast {} not found.'.format(id))
-            return redirect(url_for('index'))
+            return redirect(url_for('podcast_detail', id=id))
         current_user.follow(podcast)
         db.session.commit()
-        flash('You are following {}!'.format(id))
-        return redirect(url_for('index'))
+        return redirect(url_for('podcast_detail', id=id))
 
 @app.route('/unfollow/<id>', methods=['POST'])
 @login_required
@@ -98,8 +99,7 @@ def unfollow(id):
         podcast = Podcast.query.filter_by(id=id).first()
         if podcast is None:
             flash('Podcast {} not found.'.format(id))
-            return redirect(url_for('index'))
+            return redirect(url_for('podcast_detail', id=id))
         current_user.unfollow(podcast)
         db.session.commit()
-        flash('You are unfollowing {}!'.format(id))
-        return redirect(url_for('index'))
+        return redirect(url_for('podcast_detail', id=id))

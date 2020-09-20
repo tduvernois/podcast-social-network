@@ -1,3 +1,57 @@
 .inline-block-child {
   display: inline-block;
 }
+
+.inline-block-child-1 {
+  display: inline-block;
+}
+
+.image {
+  min-height: 100px;
+  width: 110px;
+      vertical-align: baseline;
+
+}
+
+#result {
+    margin-left: 5%;
+    width: 20%;
+    vertical-align: top;
+}
+
+.followers {
+  height: 5px;
+  font-size:11px;
+}
+
+#description {
+    width: 50%;
+    word-wrap: break-word;
+    vertical-align: top;
+    margin-left: 5%;
+
+}
+
+.block {
+    border-bottom: 1px solid #ccc;
+    margin-left: 2%;
+
+}
+
+.header {
+    border-bottom: 1px solid #ccc;
+        padding-bottom: 5%;
+}
+
+.section {
+    margin-right: 335px;
+    border-left: 1px solid #DFDFDF;
+    border-right: 1px solid #DFDFDF;
+    border-bottom: 1px solid #DFDFDF;
+    border-top: 1px solid #DFDFDF;
+}
+
+
+.before-section {
+    background-color: #F9F9F9;
+}
