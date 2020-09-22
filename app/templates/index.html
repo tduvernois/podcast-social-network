@@ -6,49 +6,44 @@
 
 </head>
 <body>
-    <div class="section">
-    <h1 class='header' style="background-color: #ffffff">Hi, {{ current_user.username }}!</h1>
-    {% for podcast in podcasts %}
-    <div class='block' style="background-color: #ffffff">
-        </p>
-
-        <a class='inline-block-child-1' href="{{ url_for('podcast_detail', id=podcast.id) }}">
-            <image class='image' src={{ podcast.image}}></image>
-        </a>
-        <div class='inline-block-child-1' id="result">
-            <p>{{ podcast.author }} : <b>{{ podcast.body }}</b></p>
-            <div class='parent'>
-              <div class='child inline-block-child'>
-                                  <form action="{{ url_for('podcast_detail', id=podcast.id) }}" method="get">
-                        {{ form_podcast_details.hidden_tag() }}
-                        {{ form_podcast_details.submit(value='Details') }}
-                    </form>
-              </div>
-              <div class='child inline-block-child'>{% if not current_user.is_following(podcast) %}
-                    <form action="{{ url_for('follow', id=podcast.id) }}" method="post">
-                        {{ form.hidden_tag() }}
-                        {{ form.submit(value='Follow') }}
-                    </form>
-                    {% else %}
-                    <form action="{{ url_for('unfollow', id=podcast.id) }}" method="post">
-                        {{ form.hidden_tag() }}
-                        {{ form.submit(value='Unfollow') }}
-                    </form>
-                    {% endif %}
-              </div>
+    <div>
+        <div class='header'>
+            <h1 class="page-title">Shows & Podcasts</h1>
+            <div class="wrapper-category-links">
+                <a href="#featured">Featured</a>
+                <a href="#daily">Daily</a>
+                <a href="#news">News & Conversations</a>
             </div>
-            <div class='followers'>
-                  <p>{{ podcast.number_of_followers() }} followers</p>
-              </div>
         </div>
-        <div class='inline-block-child-1' id='description'>
-            {{ podcast.description }}
+        <div class="section">
+            <div id="featured">Featured</div>
+            <div class="wrapper">
+                {% for podcast in podcasts_featured %}
+                  <a class='podcast' href="{{ url_for('podcast_detail', id=podcast.id) }}">
+                      <img src={{ podcast.image }}>
+                      <div class="podcast-name"> {{ podcast.body }} </div>
+                  </a>
+                {% endfor %}
+            </div>
+            <div id="daily">Daily</div>
+            <div class="wrapper">
+                {% for podcast in podcasts_daily %}
+                  <a class='podcast' href="{{ url_for('podcast_detail', id=podcast.id) }}">
+                      <img src={{ podcast.image }}>
+                      <div class="podcast-name"> {{ podcast.body }} </div>
+                  </a>
+                {% endfor %}
+            </div>
+            <div id="news">News & Conversations</div>
+            <div class="wrapper">
+                {% for podcast in podcasts_news %}
+                  <a class='podcast' href="{{ url_for('podcast_detail', id=podcast.id) }}">
+                      <img src={{ podcast.image }}>
+                      <div class="podcast-name"> {{ podcast.body }} </div>
+                  </a>
+                {% endfor %}
+            </div>
         </div>
-    </p>
-
-    </div>
-
-    {% endfor %}
     </div>
     </body>
 {% endblock %}

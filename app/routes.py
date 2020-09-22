@@ -13,20 +13,13 @@ from app.forms import EmptyForm
 @app.route('/index')
 @login_required
 def index():
-    # podcasts = [
-    #     {
-    #         'author': {'username': 'John'},
-    #         'podcast': 'generation do it yourself'
-    #     },
-    #     {
-    #         'author': {'username': 'Susan'},
-    #         'podcast': 'how I built this'
-    #     }
-    # ]
-    podcasts = Podcast.query.all();
-    form = EmptyForm()
-    form_podcast_details = EmptyForm()
-    return render_template('index.html', title='Home', podcasts=podcasts, form=form, form_podcast_details=form_podcast_details)
+    podcasts_featured = Podcast.query.filter_by(category_id=1)
+    podcasts_daily = Podcast.query.filter_by(category_id=2)
+    podcasts_news = Podcast.query.filter_by(category_id=3)
+    return render_template('index.html', title='Home',
+                           podcasts_featured=podcasts_featured,
+                           podcasts_daily=podcasts_daily,
+                           podcasts_news=podcasts_news)
 
 
 @app.route('/podcast/<id>')
