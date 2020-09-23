@@ -11,6 +11,7 @@ html {
   flex-flow: row;
   margin: 25px auto 0rem auto;
 }
+
 .audio-player .album-image {
   background-size: cover;
       width: 40%;
@@ -62,12 +63,11 @@ div[id^='play-btn'], div[id*='play-btn'] {
 }
 
 .image {
-  min-height: 200px;
-  width: 200px;
+  min-height: 80%;
+  width: 80%;
   vertical-align: baseline;
   margin-left: 50px;
   margin-right: 20px;
-
 }
 
 #result {
@@ -86,7 +86,6 @@ div[id^='play-btn'], div[id*='play-btn'] {
     word-wrap: break-word;
     vertical-align: top;
     margin-left: 5%;
-
 }
 
 .block {
@@ -97,7 +96,6 @@ div[id^='play-btn'], div[id*='play-btn'] {
     border-right: 1px solid #ccc;
     border-top: 1px solid #ccc;
     margin-bottom: 40px;
-
 }
 
 .header {
@@ -168,4 +166,27 @@ div[id^='play-btn'], div[id*='play-btn'] {
     font-size:15px;
     line-height:15px;
     color:#767676;
+}
+
+.podcast-description {
+    font-family:"Gotham SSm, Helvetica, Arial, sans-serif";
+    font-size:17px;
+    line-height:17px;
+    color:#767676;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width:100%;
+}
+
+.pt1 {
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+
+.pt2 {
+  grid-column-start: 2;
+  grid-column-end: 4;
 }

@@ -8,13 +8,13 @@
 </head>
 <body>
 <div>
-    <div class='block' style="background-color: #ffffff">
+    <div class='block wrapper' style="background-color: #ffffff">
         </p>
 
-        <a class='inline-block-child-1' href="{{ url_for('podcast_detail', id=podcast.id) }}">
+        <a class='inline-block-child-1 pt1' href="{{ url_for('podcast_detail', id=podcast.id) }}">
             <image class='image' src={{ podcast.image}}></image>
         </a>
-        <div class='inline-block-child-1' id="result">
+        <div class='inline-block-child-1 pt2' id="result">
             <p class="podcast-name">{{ podcast.author }} : <b>{{ podcast.body }}</b></p>
             <div class='parent'>
               <div class='child inline-block-child'>
@@ -33,7 +33,7 @@
                 <div class='followers child inline-block-child'>
                   <p>{{ podcast.number_of_followers() }} followers</p>
                 </div>
-                <div>
+                <div class='podcast-description'>
                     {{ podcast.description }}
 
                 </div>

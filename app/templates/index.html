@@ -16,32 +16,38 @@
             </div>
         </div>
         <div class="section">
-            <div id="featured">Featured</div>
-            <div class="wrapper">
-                {% for podcast in podcasts_featured %}
-                  <a class='podcast' href="{{ url_for('podcast_detail', id=podcast.id) }}">
-                      <img src={{ podcast.image }}>
-                      <div class="podcast-name"> {{ podcast.body }} </div>
-                  </a>
-                {% endfor %}
+            <div class="section-category">
+                <div id="featured" class="category-from-section">Featured</div>
+                <div class="wrapper">
+                    {% for podcast in podcasts_featured %}
+                      <a class='podcast' href="{{ url_for('podcast_detail', id=podcast.id) }}">
+                          <img src={{ podcast.image }}>
+                          <div class="podcast-name"> {{ podcast.body }} </div>
+                      </a>
+                    {% endfor %}
+                </div>
             </div>
-            <div id="daily">Daily</div>
-            <div class="wrapper">
-                {% for podcast in podcasts_daily %}
-                  <a class='podcast' href="{{ url_for('podcast_detail', id=podcast.id) }}">
-                      <img src={{ podcast.image }}>
-                      <div class="podcast-name"> {{ podcast.body }} </div>
-                  </a>
-                {% endfor %}
+            <div class="section-category">
+                <div id="daily" class="category-from-section">Daily</div>
+                <div class="wrapper">
+                    {% for podcast in podcasts_daily %}
+                      <a class='podcast' href="{{ url_for('podcast_detail', id=podcast.id) }}">
+                          <img src={{ podcast.image }}>
+                          <div class="podcast-name"> {{ podcast.body }} </div>
+                      </a>
+                    {% endfor %}
+                </div>
             </div>
-            <div id="news">News & Conversations</div>
-            <div class="wrapper">
-                {% for podcast in podcasts_news %}
-                  <a class='podcast' href="{{ url_for('podcast_detail', id=podcast.id) }}">
-                      <img src={{ podcast.image }}>
-                      <div class="podcast-name"> {{ podcast.body }} </div>
-                  </a>
-                {% endfor %}
+            <div class="section-category">
+                 <div id="news" class="category-from-section">News & Conversations</div>
+                <div class="wrapper">
+                    {% for podcast in podcasts_news %}
+                      <a class='podcast' href="{{ url_for('podcast_detail', id=podcast.id) }}">
+                          <img src={{ podcast.image }}>
+                          <div class="podcast-name"> {{ podcast.body }} </div>
+                      </a>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
