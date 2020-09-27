@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <head>
+        <link rel="stylesheet" href="{{url_for('static', filename='user.css')}}">
+    </head>
+    <body>
+        <h1>User: {{ user.username }}</h1>
+        <hr>
+            <div class="section-category">
+                <div id="featured" class="category-from-section">Liked Podcast</div>
+                <div class="wrapper">
+                    {% for podcast in podcasts %}
+                      <a class='podcast' href="{{ url_for('podcast_detail', id=podcast.id) }}">
+                          <img src={{ podcast.image }}>
+                          <div class="podcast-name"> {{ podcast.body }} </div>
+                      </a>
+                    {% endfor %}
+                </div>
+            </div>
+    </body>
+
+{% endblock %}

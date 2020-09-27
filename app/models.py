@@ -39,6 +39,9 @@ class User(UserMixin, db.Model):
         return self.podcasts.filter(
             userPodcast.c.podcast_id == podcast.id).count() > 0
 
+    def get_liked_podcasts(self):
+        return self.podcasts
+
     def __repr__(self):
         return '<User {}>'.format(self.username)
 

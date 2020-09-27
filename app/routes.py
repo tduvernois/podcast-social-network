@@ -84,6 +84,7 @@ def follow(id):
         db.session.commit()
         return redirect(url_for('podcast_detail', id=id))
 
+
 @app.route('/unfollow/<id>', methods=['POST'])
 @login_required
 def unfollow(id):
@@ -96,3 +97,11 @@ def unfollow(id):
         current_user.unfollow(podcast)
         db.session.commit()
         return redirect(url_for('podcast_detail', id=id))
+
+
+@app.route('/user/<username>')
+@login_required
+def user(username):
+    user = User.query.filter_by(username=username).first()
+    podcasts = user.get_liked_podcasts()
+    return render_template('user.html', user=user, podcasts=podcasts)

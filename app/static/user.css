@@ -1,0 +1,13 @@
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  width:100%;
+}
+
+.wrapper > a img {
+  max-width:100%;
+}
+
+.wrapper > a {
+  margin: 10px;
+}
