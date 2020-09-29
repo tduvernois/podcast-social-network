@@ -110,5 +110,35 @@ function userListenEpisode(userId, episodeId){
     });
 }
 
+function userFollowPodcast(podcastId, followers, isAlreadyFollowing){
+
+    if ( isAlreadyFollowing == true ){
+        $.post('/unfollow/' + podcastId, null)
+        .done(function(response) {
+            console.log("it worked")
+        }).fail(function() {
+            console.log("error")
+        });
+        $('#numberFollowers').text(parseInt(followers) - 1 + ' followers');
+        let html = '<a href="javascript:userFollowPodcast('
+                                + podcastId + ',' + (parseInt(followers) - 1) + ', false' +
+                            ");\" ><button class='btn btn-default'>Follow</button></a>";
+        $('#FollowButton').html(html);
+    }
+    else{
+        $.post('/follow/' + podcastId, null)
+        .done(function(response) {
+            console.log("it worked")
+        }).fail(function() {
+            console.log("error")
+        });
+        $('#numberFollowers').text(parseInt(followers) + 1 + ' followers');
+        let html = '<a href="javascript:userFollowPodcast('
+                                + podcastId + ',' + (parseInt(followers) + 1) + ', true' +
+                            ");\" ><button class='btn btn-default'>Unfollow</button></a>";
+        $('#FollowButton').html(html);
+    }
+}
+
 
 

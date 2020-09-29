@@ -18,20 +18,22 @@
             <p class="podcast-name">{{ podcast.author }} : <b>{{ podcast.body }}</b></p>
             <div class='parent'>
               <div class='child inline-block-child'>
-                  {% if not current_user.is_following(podcast) %}
-                    <form action="{{ url_for('follow', id=podcast.id) }}" method="post">
-                        {{ form.hidden_tag() }}
-                        {{ form.submit(value='Follow') }}
-                    </form>
-                    {% else %}
-                    <form action="{{ url_for('unfollow', id=podcast.id) }}" method="post">
-                        {{ form.hidden_tag() }}
-                        {{ form.submit(value='Unfollow') }}
-                    </form>
-                    {% endif %}
+                  <div id='FollowButton'>
+                       <a href="javascript:userFollowPodcast(
+                            '{{ podcast.id }}',
+                            '{{ podcast.number_of_followers() }}',
+                            '{{ current_user.is_following(podcast) }}'
+                        );" ><button class='btn btn-default'>
+                           {% if not current_user.is_following(podcast) %}
+                           Follow
+                           {% else %}
+                           Unfollow
+                           {% endif %}
+                       </button></a>
+                  </div>
               </div>
                 <div class='followers child inline-block-child'>
-                  <p>{{ podcast.number_of_followers() }} followers</p>
+                  <p id="numberFollowers">{{ podcast.number_of_followers() }} followers</p>
                 </div>
                 <div class='podcast-description'>
                     {{ podcast.description }}

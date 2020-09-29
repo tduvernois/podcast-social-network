@@ -79,29 +79,25 @@ def register():
 @app.route('/follow/<id>', methods=['POST'])
 @login_required
 def follow(id):
-    form = EmptyForm()
-    if form.validate_on_submit():
-        podcast = Podcast.query.filter_by(id=id).first()
-        if podcast is None:
-            flash('Podcast {} not found.'.format(id))
-            return redirect(url_for('podcast_detail', id=id))
-        current_user.follow(podcast)
-        db.session.commit()
-        return redirect(url_for('podcast_detail', id=id))
+    podcast = Podcast.query.filter_by(id=id).first()
+    if podcast is None:
+        flash('Podcast {} not found.'.format(id))
+        return jsonify({'status': 'error'})
+    current_user.follow(podcast)
+    db.session.commit()
+    return jsonify({'status': 'success'})
 
 
 @app.route('/unfollow/<id>', methods=['POST'])
 @login_required
 def unfollow(id):
-    form = EmptyForm()
-    if form.validate_on_submit():
-        podcast = Podcast.query.filter_by(id=id).first()
-        if podcast is None:
-            flash('Podcast {} not found.'.format(id))
-            return redirect(url_for('podcast_detail', id=id))
-        current_user.unfollow(podcast)
-        db.session.commit()
-        return redirect(url_for('podcast_detail', id=id))
+    podcast = Podcast.query.filter_by(id=id).first()
+    if podcast is None:
+        flash('Podcast {} not found.'.format(id))
+        return jsonify({'status': 'error'})
+    current_user.unfollow(podcast)
+    db.session.commit()
+    return jsonify({'status': 'success'})
 
 
 @app.route('/user/<username>')
