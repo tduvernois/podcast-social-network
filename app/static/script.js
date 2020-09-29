@@ -99,3 +99,16 @@ function initPlayers(num) {
   }
 }
 
+function userListenEpisode(userId, episodeId){
+    $.post('/listen', {
+        userId: userId,
+        episodeId: episodeId
+    }).done(function(response) {
+        console.log("it worked")
+    }).fail(function() {
+        console.log("error")
+    });
+}
+
+
+

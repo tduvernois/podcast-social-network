@@ -9,6 +9,11 @@ userPodcast = db.Table('UserPodcast',
                        db.Column('podcast_id', db.Integer, db.ForeignKey('podcast.id'), primary_key=True)
                        )
 
+userEpisode = db.Table('UserEpisode',
+                       db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+                       db.Column('episode_id', db.Integer, db.ForeignKey('episode.id'), primary_key=True)
+                       )
+
 
 # inherit from UserMixin for flask-login
 class User(UserMixin, db.Model):
@@ -18,6 +23,10 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     podcasts = db.relationship('Podcast', secondary=userPodcast, lazy='dynamic',
                                # primaryjoin=(userPodcast.c.user_id == id),
+                               backref=db.backref('user')
+                               )
+    episodes = db.relationship('Episode', secondary=userEpisode, lazy='dynamic',
+                               # primaryjoin=(userEpisode.c.user_id == id),
                                backref=db.backref('user')
                                )
 
@@ -39,8 +48,19 @@ class User(UserMixin, db.Model):
         return self.podcasts.filter(
             userPodcast.c.podcast_id == podcast.id).count() > 0
 
+    def listen(self, episode):
+        if not self.has_listened_episode(episode):
+            self.episodes.append(episode)
+
+    def has_listened_episode(self, episode):
+        return self.episodes.filter(
+            userEpisode.c.episode_id == episode.id).count() > 0
+
     def get_liked_podcasts(self):
         return self.podcasts
+
+    def get_listened_episodes(self):
+        return self.episodes
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -79,6 +99,7 @@ class Episode(db.Model):
     audio_link = db.Column(db.String(500))
     description = db.Column(db.String(5000))
     image = db.Column(db.String(500))
+    users = db.relationship('User', secondary=userEpisode, lazy='dynamic')
 
 
 class Category(db.Model):

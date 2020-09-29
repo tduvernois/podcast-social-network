@@ -1,12 +1,13 @@
 from app import app, db
 from flask import render_template, flash, redirect, url_for
 from app.forms import LoginForm
-from app.models import Podcast, User
+from app.models import Podcast, User, Episode
 from flask_login import current_user, login_user, login_required, logout_user
 from flask import request
 from werkzeug.urls import url_parse
 from app.forms import RegistrationForm
 from app.forms import EmptyForm
+from flask import jsonify
 
 
 @app.route('/')
@@ -27,10 +28,14 @@ def index():
 def podcast_detail(id):
     podcast = Podcast.query.get(id)
     episodes = podcast.get_all_episodes()
+    episode_id = []
+    for i in range(episodes.__len__()):
+        episode_id.append(episodes[i].id)
     form = EmptyForm()
     form_podcast_details = EmptyForm()
     return render_template('podcast.html', title='Podcast', podcast=podcast, episodes=episodes, form=form,
-                           form_podcast_details=form_podcast_details)
+                           form_podcast_details=form_podcast_details,
+                           episode_id=episode_id)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -104,4 +109,24 @@ def unfollow(id):
 def user(username):
     user = User.query.filter_by(username=username).first()
     podcasts = user.get_liked_podcasts()
-    return render_template('user.html', user=user, podcasts=podcasts)
+    listened_episodes = user.get_listened_episodes()
+    return render_template('user.html', user=user, podcasts=podcasts, listened_episodes=listened_episodes)
+
+
+# from flask_cors import CORS, cross_origin
+#
+# cors = CORS(app)
+# app.config['CORS_HEADERS'] = 'Content-Type'
+
+
+@app.route('/listen', methods=['POST'])
+@login_required
+# @cross_origin()
+def episode_listened():
+    user_id = request.form['userId']
+    episode_id = request.form['episodeId']
+    user = User.query.filter_by(id=user_id).first()
+    episode = Episode.query.filter_by(id=episode_id).first()
+    user.listen(episode)
+    db.session.commit()
+    return jsonify({'status': 'success'})

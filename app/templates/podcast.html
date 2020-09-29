@@ -59,8 +59,13 @@
                 {{ episode.description }}
             </div>
             <div class="audio-player">
-                <div id={{ "play-btn" ~ loop.index }}></div>
-                    <div class="audio-wrapper" id={{ "player-container" ~ loop.index }} href="javascript:;">
+                <a href="javascript:userListenEpisode(
+                            '{{ current_user.id}}',
+                            '{{ episode.id }}'
+                        );">
+                    <div id={{ "play-btn" ~ loop.index }}></div>
+                </a>
+                    <div class="audio-wrapper" id={{ "player-container" ~ loop.index }}>
                       <audio id={{ "player" ~ loop.index }} ontimeupdate="initProgressBar({{ loop.index }})">
                               <source src={{ episode.audio_link }} type="audio/mp3">
                       </audio>
@@ -82,7 +87,6 @@
     </div>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script><script  src="{{url_for('static', filename='script.js')}}"></script>
     <script>
-        //console.log(jQuery('#player-container').length)
         initPlayers($('[id^=player-container]').length)
     </script>
 </div>
