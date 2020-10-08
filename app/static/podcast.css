@@ -4,23 +4,25 @@ html {
 
 .audio-player {
   background: white;
-  border: 1px solid #dfdfdf;
-  width: 50vw;
+  width: 25vw;
   text-align: center;
   display: flex;
   flex-flow: row;
-  margin: 25px auto 0rem auto;
+
 }
 
-.audio-player .album-image {
+.album-image {
   background-size: cover;
-      width: 40%;
-    height: auto;
+    width: 10rem;
+    height: 5rem;
+    float: right;
+    margin: 10px 0 10px 10px;
 }
+
 .audio-player .player-controls {
   align-items: center;
   justify-content: center;
-  margin-top: 2.5rem;
+  margin: auto;
   flex: 3;
 }
 .audio-player .player-controls progress {
@@ -49,10 +51,10 @@ html {
 div[id^='play-btn'], div[id*='play-btn'] {
    background-image: url("http://www.lukeduncan.me/images/play-button.png");
   background-size: cover;
-  width: 75px;
-  height: 75px;
-  margin: 2rem 0 2rem 2rem;
-  }
+  width: 50px;
+  height: 50px;
+  margin: 1rem 0 1rem 1rem;
+}
 
 .inline-block-child {
   display: inline-block;
@@ -66,14 +68,13 @@ div[id^='play-btn'], div[id*='play-btn'] {
   min-height: 80%;
   width: 80%;
   vertical-align: baseline;
-  margin-left: 50px;
   margin-right: 20px;
 }
 
 #result {
-    margin-left: 5%;
-    width: 60%;
     vertical-align: top;
+    float: right;
+    width: 50%;
 }
 
 .followers {
@@ -96,6 +97,8 @@ div[id^='play-btn'], div[id*='play-btn'] {
     border-right: 1px solid #ccc;
     border-top: 1px solid #ccc;
     margin-bottom: 40px;
+    padding-right: 50px;
+    padding-left: 50px;
 }
 
 .header {
@@ -175,18 +178,40 @@ div[id^='play-btn'], div[id*='play-btn'] {
     color:#767676;
 }
 
-.wrapper {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  width:100%;
-}
-
 .pt1 {
-  grid-column-start: 1;
-  grid-column-end: 2;
+    width: 50%;
 }
 
-.pt2 {
-  grid-column-start: 2;
-  grid-column-end: 4;
+.podcast-main {
+    height: auto;
+    width: 100%;
+    display: flex;
 }
+
+@media all and (max-width: 992px) {
+  .podcast-main {
+    display: unset;
+  }
+
+  .pt1 {
+    float:right;
+    width: 25%;
+  }
+
+  #result {
+      width: 100%;
+      float: unset;
+  }
+
+  .block {
+  display:flex;
+  }
+
+  .image {
+    margin-right: unset;
+        text-align: right;
+
+  }
+}
+
+

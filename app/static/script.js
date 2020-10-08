@@ -20,7 +20,7 @@ function calculateCurrentValue(currentTime) {
 
 function initProgressBar(i) {
   var player = document.getElementById('player'+ i);
-  var length = player.duration
+  var length = player.duration;
   var current_time = player.currentTime;
 
   // calculate total length of value
@@ -69,9 +69,6 @@ function initPlayers(num) {
             togglePlay()
         });
       }
-
-
-
       // Controls & Sounds Methods
       // ----------------------------------------------------------
       function togglePlay(evt) {
@@ -96,6 +93,7 @@ function initPlayers(num) {
         }
       }
     }());
+
   }
 }
 

@@ -8,39 +8,39 @@
 </head>
 <body>
 <div>
-    <div class='block wrapper' style="background-color: #ffffff">
-        </p>
-
-        <a class='inline-block-child-1 pt1' href="{{ url_for('podcast_detail', id=podcast.id) }}">
-            <image class='image' src={{ podcast.image}}></image>
-        </a>
-        <div class='inline-block-child-1 pt2' id="result">
-            <p class="podcast-name">{{ podcast.author }} : <b>{{ podcast.body }}</b></p>
-            <div class='parent'>
-              <div class='child inline-block-child'>
-                  <div id='FollowButton'>
-                       <a href="javascript:userFollowPodcast(
-                            '{{ podcast.id }}',
-                            '{{ podcast.number_of_followers() }}',
-                            '{{ current_user.is_following(podcast) }}'
-                        );" ><button class='btn btn-default'>
-                           {% if not current_user.is_following(podcast) %}
-                           Follow
-                           {% else %}
-                           Unfollow
-                           {% endif %}
-                       </button></a>
-                  </div>
-              </div>
-                <div class='followers child inline-block-child'>
-                  <p id="numberFollowers">{{ podcast.number_of_followers() }} followers</p>
-                </div>
-                <div class='podcast-description'>
-                    {{ podcast.description }}
-
-                </div>
+    <div class='block' style="background-color: #ffffff">
+        <div class="podcast-main">
+            <div class='pt1'>
+                <image class='image' src={{ podcast.image}}></image>
             </div>
+            <div class='pt2' id="result">
+                <p class="podcast-name"><b>{{ podcast.body }}</b></p>
+                <div class='parent'>
+                  <div class='child inline-block-child'>
+                      <div id='FollowButton'>
+                           <a href="javascript:userFollowPodcast(
+                                '{{ podcast.id }}',
+                                '{{ podcast.number_of_followers() }}',
+                                '{{ current_user.is_following(podcast) }}'
+                            );" ><button class='btn btn-default'>
+                               {% if not current_user.is_following(podcast) %}
+                               Follow
+                               {% else %}
+                               Unfollow
+                               {% endif %}
+                           </button></a>
+                      </div>
+                  </div>
+                    <div class='followers child inline-block-child'>
+                      <p id="numberFollowers">{{ podcast.number_of_followers() }} followers</p>
+                    </div>
+                    <div class='podcast-description'>
+                        {{ podcast.description }}
 
+                    </div>
+                </div>
+
+            </div>
         </div>
 <!--        <div class='inline-block-child-1' id='description'>-->
 <!--            {{ podcast.description }}-->
@@ -54,6 +54,8 @@
             MOST RECENT EPISODES
         </div>
         {% for episode in episodes %}
+        <img class="album-image" style="background-image: url({{ episode.image }})"></img>
+
         <div class="episode">
             <div class="episode-date">{{ episode.timestamp.strftime('%Y-%m-%d') }}</div>
             <p class="episode-name">{{ episode.title }}</b></p>
@@ -73,7 +75,7 @@
                       </audio>
                     </div>
                     <div class="player-controls scrubber">
-                      <p class="episode-title-in-audio-player">{{ episode.title }}</p>
+<!--                      <p class="episode-title-in-audio-player">{{ episode.title }}</p>-->
                       <span id="seekObjContainer">
                           <progress id={{ "seekObj" ~ loop.index }} value="0" max="1"></progress>
                       </span>
@@ -81,8 +83,8 @@
                       <small style="float: left; position: relative; left: 15px;" class={{ "start-time" ~ loop.index }}></small>
                       <small style="float: right; position: relative; right: 20px;" class={{ "end-time" ~ loop.index }}></small>
                     </div>
-                <div class="album-image" style="background-image: url({{ episode.image }})"></div>
             </div>
+
             <!-- partial -->
         </div>
         {% endfor %}
