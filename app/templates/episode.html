@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+</head>
+<body>
+<div>
+    <div class="episodes" style="background-color: #ffffff">
+        <img class="album-image" style="background-image: url({{ episode.image }})">
+
+        <div class="episode">
+            <div class="episode-date">{{ episode.timestamp.strftime('%Y-%m-%d') }}</div>
+            <p class="episode-name">{{ episode.title }}</b></p>
+            <div class="episode-description">
+                {{ episode.description }}
+            </div>
+            <div class="audio-player">
+                <a href="javascript:userListenEpisode(
+                            '{{ current_user.id}}',
+                            '{{ episode.id }}'
+                        );">
+                    <div id="play-btn1"></div>
+                </a>
+                <div class="audio-wrapper" id="player-container1">
+                    <audio id="player1" ontimeupdate="initProgressBar(1)">
+                        <source src={{ episode.audio_link }} type="audio/mp3">
+                    </audio>
+                </div>
+                <div class="player-controls scrubber">
+                    <!--                      <p class="episode-title-in-audio-player">{{ episode.title }}</p>-->
+                    <span id="seekObjContainer">
+                          <progress id="seekObj1" value="0" max="1"></progress>
+                      </span>
+                    <br>
+                    <small style="float: left; position: relative; left: 15px;" class="start-time1"></small>
+                    <small style="float: right; position: relative; right: 20px;" class="end-time1"></small>
+                </div>
+            </div>
+            <p></p>
+            <div>
+                <div>
+                    <div class="episode-id" hidden>{{ episode.id }}</div>
+                    <div class="username" hidden>{{ current_user.username }}</div>
+
+                    <form class="ui form" id="form-comment">
+                        <input id="input" type="text" name="comment" placeholder="Write a comment" class="input-new-comment">
+<!--                        <input type="submit" value="Submit">-->
+                        <button class="ui button" type="submit" value="Submit">Comment</button>
+                    </form>
+                </div>
+                <div id="comments-section">
+                    <div id="number-comments">
+                        <i class="comment icon" id="icon-number-comments"></i>
+                        <p id="comment-number-value">{{ comment_number }}</p>
+                        <p id="comment-string">comments</p>
+                    </div>
+                    <div class="ui comments">
+
+                        {% for comments_with_user in comments_with_users %}
+                        <div id={{"comment-id-backend" ~ loop.index }} hidden>{{ comments_with_user.comment.original.id
+                            }}
+                        </div>
+
+                        <div class="comment" id={{
+                        "comment" ~ loop.index }} >
+                        <a class="avatar">
+                            <img id="avatar-image" src="https://imgur.com/I80W1Q0.png"/>
+                        </a>
+                        <div class="content">
+                            <a class="author">{{comments_with_user.user.username}}</a>
+                            <div class="metadata">
+                                <span class="date">{{ comments_with_user.comment.original.timestamp.strftime('%Y-%m-%d') }}</span>
+                            </div>
+                            <div class="text">
+                                {{ comments_with_user.comment.original.message}}
+                            </div>
+                            <div class="actions">
+                                <a class="reply" id={{ "reply" ~ loop.index }}>Reply</a>
+                            </div>
+                            <div class="comments" id={{ "replies" ~ loop.index }}>
+                            {% for reply in comments_with_user.comment.replies %}
+                            <div class="comment">
+                                <a class="avatar">
+                                    <img id="avatar-image2" src="https://imgur.com/I80W1Q0.png"/>
+                                </a>
+                                <div class="content">
+                                    <a class="author">{{ reply.user.username }}</a>
+                                    <div class="metadata">
+                                        <span class="date">{{ reply.reply.timestamp.strftime('%Y-%m-%d') }}</span>
+                                    </div>
+                                    <div class="text">
+                                        {{ reply.reply.message }}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- partial -->
+    </div>
+</div>
+<script src="{{url_for('static', filename='script.js')}}"></script>
+<script src="{{url_for('static', filename='episode.js')}}"></script>
+<script>
+        initPlayers($('[id^=player-container]').length)
+<!--        replyForm()-->
+        initReply($('[id^=comment]').length)
+</script>
+</div>
+</body>
+
+{% endblock %}

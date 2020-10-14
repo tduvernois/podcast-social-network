@@ -1,7 +1,7 @@
 from app import app, db
 from flask import render_template, flash, redirect, url_for
 from app.forms import LoginForm
-from app.models import Podcast, User, Episode
+from app.models import Podcast, User, Episode, Comment
 from flask_login import current_user, login_user, login_required, logout_user
 from flask import request
 from werkzeug.urls import url_parse
@@ -124,5 +124,59 @@ def episode_listened():
     user = User.query.filter_by(id=user_id).first()
     episode = Episode.query.filter_by(id=episode_id).first()
     user.listen(episode)
+    db.session.commit()
+    return jsonify({'status': 'success'})
+
+
+@app.route('/episode/<id>')
+@login_required
+def episode_detail(id):
+    episode = Episode.query.get(id)
+    comments = Comment.query.filter_by(episode_id=id).order_by(Comment.timestamp.desc())
+    comments_with_users = []
+    comment_number = 0
+    for c in comments.all():
+        comment_number = comment_number + 1
+        replies_with_users = []
+        user = User.query.get(c.user_id)
+        replies = c.reply.all()
+        for r in replies:
+            comment_number = comment_number + 1
+            user = User.query.get(r.user_id)
+            o = { 'reply': r, 'user': user}
+            replies_with_users.append(o)
+
+        comments_with_users.append({'comment': { 'original': c, 'replies': replies_with_users}, 'user': user})
+
+    return render_template('episode.html', title='Episode', episode=episode,
+                           comments=comments, comments_with_users=comments_with_users,
+                           current_user=current_user, comment_number=comment_number)
+
+
+@app.route('/comments', methods=['POST'])
+@login_required
+# @cross_origin()
+def comments():
+    user_id = current_user.id
+    episode_id = request.form['episodeId']
+    episode_time = request.form['episodeTime']
+    message = request.form['message']
+    comment = Comment(user_id=user_id, episode_id=episode_id, episode_time=episode_time, message=message)
+    db.session.add(comment)
+    db.session.commit()
+    return jsonify({'status': 'success', 'commentId': comment.id})
+
+
+@app.route('/reply', methods=['POST'])
+@login_required
+# @cross_origin()
+def reply():
+    user_id = current_user.id
+    id = request.form['commentId']
+    message = request.form['message']
+    comment = Comment.query.filter_by(id=id)[0]
+    reply = Comment(user_id=user_id, message=message)
+    db.session.add(reply)
+    comment.reply.append(reply)
     db.session.commit()
     return jsonify({'status': 'success'})

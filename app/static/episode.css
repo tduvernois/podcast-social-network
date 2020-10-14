@@ -1,0 +1,142 @@
+html {
+  height: 100%;
+}
+
+.audio-player {
+  background: white;
+  width: 25vw;
+  text-align: center;
+  display: flex;
+  flex-flow: row;
+
+}
+
+.album-image {
+  background-size: cover;
+    width: 10rem;
+    height: 5rem;
+    float: right;
+    margin: 10px 0 10px 10px;
+}
+
+.audio-player .player-controls {
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  flex: 3;
+}
+.audio-player .player-controls progress {
+  width: 90%;
+}
+.audio-player .player-controls progress[value] {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: white;
+  color: blue;
+  height: 5px;
+}
+.audio-player .player-controls progress[value]::-webkit-progress-bar {
+  background-color: white;
+  border-radius: 2px;
+  border: 1px solid #dfdfdf;
+  color: blue;
+}
+.audio-player .player-controls progress::-webkit-progress-value {
+  background-color: blue;
+}
+.audio-player .player-controls p {
+  font-size: 13px;
+}
+
+div[id^='play-btn'], div[id*='play-btn'] {
+   background-image: url("http://www.lukeduncan.me/images/play-button.png");
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  margin: 1rem 0 1rem 1rem;
+}
+
+
+.episodes {
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.episode-name {
+    font-family:"Gotham SSm, Helvetica, Arial, sans-serif";
+    font-size:16px;
+    line-height:18px;
+    color:#000017;
+}
+
+.episode-date {
+    font-family:"Gotham SSm, Helvetica, Arial, sans-serif";
+    font-size:12px;
+    line-height:12px;
+    color:#636363;
+    margin-bottom: 5px;
+
+}
+
+.episode {
+    margin-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.episode-description {
+    font-family:"Gotham SSm, Helvetica, Arial, sans-serif";
+    font-size:15px;
+    line-height:15px;
+    color:#767676;
+}
+
+#avatar-image {
+    height: unset
+}
+
+.reply-comments {
+    padding: 1em 0 0 3em;
+}
+
+#avatar-image2 {
+    height: unset
+}
+
+#number-comments {
+    display: flex;
+    color:#999999;
+    border-bottom: 1px solid #ccc;
+
+}
+
+#icon-number-comments {
+    font-size: 2em
+}
+
+#comments-section {
+    margin: 40px 0 0 10%;
+}
+
+#form-comment {
+    display: flex;
+    width: 60%;
+}
+
+#comment-string {
+  margin-left: 4px;
+}
+
+form[form^='reply-form'], form[id*='reply-form'] {
+    margin-left: 2.5em;
+}
+
+.field {
+  display: flex;
+  max-width: 60%;
+
+}

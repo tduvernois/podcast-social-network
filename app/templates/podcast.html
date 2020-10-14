@@ -58,7 +58,7 @@
 
         <div class="episode">
             <div class="episode-date">{{ episode.timestamp.strftime('%Y-%m-%d') }}</div>
-            <p class="episode-name">{{ episode.title }}</b></p>
+            <p class="episode-name"><a href="{{ url_for('episode_detail', id=episode.id) }}">{{ episode.title }}</a></b></p>
             <div class="episode-description">
                 {{ episode.description }}
             </div>

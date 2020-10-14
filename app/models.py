@@ -14,6 +14,10 @@ userEpisode = db.Table('UserEpisode',
                        db.Column('episode_id', db.Integer, db.ForeignKey('episode.id'), primary_key=True)
                        )
 
+replies = db.Table('replies',
+    db.Column('original', db.Integer, db.ForeignKey('comment.id')),
+    db.Column('reply', db.Integer, db.ForeignKey('comment.id'))
+)
 
 # inherit from UserMixin for flask-login
 class User(UserMixin, db.Model):
@@ -29,6 +33,7 @@ class User(UserMixin, db.Model):
                                # primaryjoin=(userEpisode.c.user_id == id),
                                backref=db.backref('user')
                                )
+    # comments = db.relationship('Comment', backref='user', lazy=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -106,6 +111,20 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(140))
     podcasts = db.relationship('Podcast', backref='category', lazy=True)
+
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    message = db.Column(db.String(5000))
+    episode_time = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    episode_id = db.Column(db.Integer, db.ForeignKey('episode.id'), nullable=True)
+    reply = db.relationship(
+        'Comment', secondary=replies,
+        primaryjoin=(replies.c.original == id),
+        secondaryjoin=(replies.c.reply == id),
+        backref=db.backref('replies', lazy='dynamic'), lazy='dynamic')
 
 
 @login.user_loader
