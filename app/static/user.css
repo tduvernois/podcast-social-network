@@ -11,3 +11,36 @@
 .wrapper > a {
   margin: 10px;
 }
+
+.section {
+    border-left: 1px solid #DFDFDF;
+    border-right: 1px solid #DFDFDF;
+    border-bottom: 1px solid #DFDFDF;
+    border-top: 1px solid #DFDFDF;
+    background-color: #ffffff;
+    padding: 5%;
+}
+
+.section-category {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #DFDFDF;
+}
+
+.listened-episode {
+    display: flex;
+}
+
+.episode-from-profile {
+    border-bottom: unset;
+    margin-left: 5%;
+}
+
+div.episode-from-profile p {
+    margin: unset;
+    margin-bottom: 5px;
+
+}
+
+.listening-history-title {
+    margin-bottom: 10px;
+}

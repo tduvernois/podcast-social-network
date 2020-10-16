@@ -1,30 +1,48 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <head>
-        <link rel="stylesheet" href="{{url_for('static', filename='user.css')}}">
-    </head>
-    <body>
-        <h1>User: {{ user.username }}</h1>
-        <hr>
-        <div class="section-category">
-            <div id="featured" class="category-from-section">Liked Podcast</div>
-            <div class="wrapper">
-                {% for podcast in podcasts %}
-                  <a class='podcast' href="{{ url_for('podcast_detail', id=podcast.id) }}">
-                      <img src={{ podcast.image }}>
-                      <div class="podcast-name"> {{ podcast.body }} </div>
-                  </a>
-                {% endfor %}
+<head>
+    <link rel="stylesheet" href="{{url_for('static', filename='user.css')}}">
+</head>
+<body>
+<div class="section">
+    <h1>User: {{ user.username }}</h1>
+    <hr>
+    <div class="section-category">
+        <div id="featured" class="category-from-section">Following</div>
+        <div class="wrapper">
+            {% for podcast in podcasts %}
+            <a class='podcast' href="{{ url_for('podcast_detail', id=podcast.id) }}">
+                <img src={{ podcast.image }}>
+                <div class="podcast-name"> {{ podcast.body }}</div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    <div>
+        <div class="category-from-section">
+            <div class="listening-history-title">Listening history</div>
+
+
+            {% for h in historical_data%}
+            <div class="listened-episode">
+                <img class="album-image" style="background-image: url({{ h.episode.image }})"></img>
+
+                <div class="episode episode-from-profile">
+                    <div class="episode-date">{{ h.episode.timestamp.strftime('%Y-%m-%d') }}</div>
+                    <p class="episode-name">
+                        <a href="{{ url_for('podcast_detail', id=h.podcast.id) }}">{{ h.podcast.body }}</a>
+                    </p>
+                    <p>
+                        <a href="{{ url_for('episode_detail', id=h.episode.id) }}">{{ h.episode.title }}</a>
+                    </p>
+                </div>
             </div>
+            {% endfor %}
+
         </div>
-        <div>
-            <ul>
-                {% for episode in listened_episodes%}
-                    <li>{{ episode.title }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-    </body>
+    </div>
+
+</body>
 
 {% endblock %}

@@ -105,8 +105,14 @@ def unfollow(id):
 def user(username):
     user = User.query.filter_by(username=username).first()
     podcasts = user.get_liked_podcasts()
-    listened_episodes = user.get_listened_episodes()
-    return render_template('user.html', user=user, podcasts=podcasts, listened_episodes=listened_episodes)
+    listened_episodes = user.get_listened_episodes().order_by(Episode.timestamp.desc())
+    historical_data = []
+    for e in listened_episodes.all():
+        podcast = e.get_podcast()
+        item = {"podcast": podcast, "episode": e }
+        historical_data.append(item)
+
+    return render_template('user.html', user=user, podcasts=podcasts, historical_data=historical_data)
 
 
 # from flask_cors import CORS, cross_origin

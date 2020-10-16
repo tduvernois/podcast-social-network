@@ -106,6 +106,8 @@ class Episode(db.Model):
     image = db.Column(db.String(500))
     users = db.relationship('User', secondary=userEpisode, lazy='dynamic')
 
+    def get_podcast(self):
+        return Podcast.query.get(self.podcast_id)
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
