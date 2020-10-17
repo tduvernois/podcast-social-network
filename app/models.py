@@ -3,6 +3,10 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login
+from hashlib import md5
+import os
+from app import app, db
+
 
 userPodcast = db.Table('UserPodcast',
                        db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
@@ -19,6 +23,10 @@ replies = db.Table('replies',
     db.Column('reply', db.Integer, db.ForeignKey('comment.id'))
 )
 
+
+def default_avatar():
+    return 'default.png'
+
 # inherit from UserMixin for flask-login
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -33,7 +41,15 @@ class User(UserMixin, db.Model):
                                # primaryjoin=(userEpisode.c.user_id == id),
                                backref=db.backref('user')
                                )
-    # comments = db.relationship('Comment', backref='user', lazy=True)
+
+    photo = db.Column(db.String(200), default=default_avatar())
+
+    def avatar(self, size):
+        if self.photo is not None:
+            return os.path.join(
+            app.config['PHOTO_PATH'], self.photo)
+
+
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

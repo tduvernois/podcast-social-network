@@ -10,32 +10,35 @@ function addComment(comment) {
 function addCommentNew(comment) {
   var parent = document.getElementsByClassName("comments")[0];
   var username = document.getElementsByClassName("username")[0].textContent;
+  var photo = document.getElementsByClassName("profile-photo")[0].textContent;
   var div = document.createElement("div");
   parent.prepend(div);
 
   //var domString = '<div class="container"><span class="intro">Hello</span> <span id="name"> World!</span></div>';
   var id = $('[id^=comment]').length + 1;
-  var domString = commentDOM(username, comment, false, id);
+  var domString = commentDOM(username, comment, false, id, photo);
   div.outerHTML =  domString;
 }
 
 function addReplyComment(commentId, message) {
   var parent = document.getElementById("replies" + commentId);
   var username = document.getElementsByClassName("username")[0].textContent;
+  var photo = document.getElementsByClassName("profile-photo")[0].textContent;
+
   var div = document.createElement("div");
 //  div.className = "reply-comments";
   parent.appendChild(div);
 
   //var domString = '<div class="container"><span class="intro">Hello</span> <span id="name"> World!</span></div>';
-  var domString = commentDOM(username, message, true);
+  var domString = commentDOM(username, message, true, null, photo);
   div.outerHTML =  domString;
 }
 
-function commentDOM(username, message, isReply, id){
+function commentDOM(username, message, isReply, id, photo){
     if ( !isReply){
         return '<div class="comment" id="comment' + id + '"> \
                 <a class="avatar"> \
-                    <img id="avatar-image" src="https://imgur.com/I80W1Q0.png"/> \
+                    <img id="avatar-image" src=' + photo + ' /> \
                 </a> \
                 <div class="content"> \
                     <a class="author">' + username + '</a> \
@@ -53,7 +56,7 @@ function commentDOM(username, message, isReply, id){
     }
     return '<div class="comment"> \
                 <a class="avatar"> \
-                    <img id="avatar-image" src="https://imgur.com/I80W1Q0.png"/> \
+                    <img id="avatar-image" src=' + photo + '/> \
                 </a> \
                 <div class="content"> \
                     <a class="author">' + username + '</a> \

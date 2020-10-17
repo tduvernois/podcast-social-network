@@ -44,3 +44,7 @@ div.episode-from-profile p {
 .listening-history-title {
     margin-bottom: 10px;
 }
+
+#profile-image {
+ max-width: 200px;
+}

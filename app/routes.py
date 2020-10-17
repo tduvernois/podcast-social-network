@@ -109,7 +109,7 @@ def user(username):
     historical_data = []
     for e in listened_episodes.all():
         podcast = e.get_podcast()
-        item = {"podcast": podcast, "episode": e }
+        item = {"podcast": podcast, "episode": e}
         historical_data.append(item)
 
     return render_template('user.html', user=user, podcasts=podcasts, historical_data=historical_data)
@@ -148,15 +148,16 @@ def episode_detail(id):
         replies = c.reply.all()
         for r in replies:
             comment_number = comment_number + 1
-            user = User.query.get(r.user_id)
-            o = { 'reply': r, 'user': user}
+            reply_user = User.query.get(r.user_id)
+            o = {'reply': r, 'user': reply_user}
             replies_with_users.append(o)
 
-        comments_with_users.append({'comment': { 'original': c, 'replies': replies_with_users}, 'user': user})
+        comments_with_users.append({'comment': {'original': c, 'replies': replies_with_users}, 'user': user})
 
+    photo_path = app.config['PHOTO_PATH_STATIC']
     return render_template('episode.html', title='Episode', episode=episode,
                            comments=comments, comments_with_users=comments_with_users,
-                           current_user=current_user, comment_number=comment_number)
+                           current_user=current_user, comment_number=comment_number, photo_path=photo_path)
 
 
 @app.route('/comments', methods=['POST'])
@@ -186,3 +187,35 @@ def reply():
     comment.reply.append(reply)
     db.session.commit()
     return jsonify({'status': 'success'})
+
+
+from app.forms import EditProfileForm
+from werkzeug.utils import secure_filename
+import os
+
+
+@app.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    form = EditProfileForm()
+    if form.validate_on_submit():
+
+        f = form.photo.data
+        filename = secure_filename(f.filename)
+        f.save(os.path.join(
+            app.config['PHOTO_PATH'], filename
+        ))
+        current_user.username = form.username.data
+        current_user.photo = f.filename
+        db.session.commit()
+        return redirect(url_for('user', username=current_user.username))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+    return render_template('edit_profile.html', title='Edit Profile',
+                           form=form)
+
+@app.route('/photo')
+@login_required
+def get_photo():
+    current_user.photo
+

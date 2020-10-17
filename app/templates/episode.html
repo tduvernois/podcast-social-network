@@ -41,6 +41,8 @@
                 <div>
                     <div class="episode-id" hidden>{{ episode.id }}</div>
                     <div class="username" hidden>{{ current_user.username }}</div>
+                    <div class="profile-photo" hidden>{{ photo_path + '/' + current_user.photo }}</div>
+
 
                     <form class="ui form" id="form-comment">
                         <input id="input" type="text" name="comment" placeholder="Write a comment" class="input-new-comment">
@@ -64,7 +66,7 @@
                         <div class="comment" id={{
                         "comment" ~ loop.index }} >
                         <a class="avatar">
-                            <img id="avatar-image" src="https://imgur.com/I80W1Q0.png"/>
+                            <img id="avatar-image" src="{{url_for('static', filename='images/photos/' + comments_with_user.user.photo)}}"/>
                         </a>
                         <div class="content">
                             <a class="author">{{comments_with_user.user.username}}</a>
@@ -81,7 +83,7 @@
                             {% for reply in comments_with_user.comment.replies %}
                             <div class="comment">
                                 <a class="avatar">
-                                    <img id="avatar-image2" src="https://imgur.com/I80W1Q0.png"/>
+                                    <img id="avatar-image2" src="{{url_for('static', filename='images/photos/' + reply.user.photo)}}"/>
                                 </a>
                                 <div class="content">
                                     <a class="author">{{ reply.user.username }}</a>
