@@ -8,6 +8,7 @@
 </head>
 <body>
     <div class="episodes" style="background-color: #ffffff">
+        <h1 class="ui header" style="margin-top: 19px">My Feed</h1>
         {% for podcast in podcast_with_episodes %}
         <img class="album-image" style="background-image: url({{ podcast.image }})">
 
@@ -44,6 +45,7 @@
     </div>
 <script src="{{url_for('static', filename='script.js')}}"></script>
 <script src="{{url_for('static', filename='episode.js')}}"></script>
+    <script src="{{url_for('static', filename='my_feed.js')}}"></script>
 <script>
         initPlayers($('[id^=player-container]').length)
 </script>

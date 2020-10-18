@@ -48,6 +48,13 @@ class User(UserMixin, db.Model):
             return os.path.join(
             app.config['PHOTO_PATH'], self.photo)
 
+    def to_dict(self):
+        data = {
+            'id': self.id,
+            'username': self.username
+        }
+        return data
+
 
 
     def set_password(self, password):

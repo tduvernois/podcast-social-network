@@ -214,12 +214,32 @@ def edit_profile():
 @app.route('/my_feed')
 @login_required
 def my_feed():
+    page = request.args.get('page', 1, type=int)
     podcast_with_episodes = current_user.query.join(userPodcast) \
         .join(Podcast) \
         .join(Episode) \
         .add_columns(Podcast.body, Podcast.id.label("podcast_id"), Episode.timestamp, Episode.id, Episode.title,
                      Episode.audio_link, Episode.image, Episode.description) \
         .order_by(Episode.timestamp.desc()) \
-        .paginate(1, 10, False).items
+        .paginate(page, 5, False).items
 
-    return render_template('my_feed.html', podcast_with_episodes=podcast_with_episodes)
+
+
+    if page == 1:
+        return render_template('my_feed.html', podcast_with_episodes=podcast_with_episodes)
+
+    o = []
+    for x in podcast_with_episodes:
+        o.append({ 'user': x.User.to_dict(),
+                   'podcast_id': x.podcast_id,
+                   'podcast_title': x.body,
+                   'timestamp': x.timestamp,
+                   'podcast_id': x.podcast_id,
+                   'episode_id': x.id,
+                   'episode_title': x.title,
+                   'audio_link': x.audio_link,
+                   'image': x.image,
+                   'description': x.description
+                   })
+    return jsonify(o)
+
