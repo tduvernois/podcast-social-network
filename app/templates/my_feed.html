@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+
+    <link rel="stylesheet" href="{{url_for('static', filename='episode.css')}}">
+
+</head>
+<body>
+    <div class="episodes" style="background-color: #ffffff">
+        {% for podcast in podcast_with_episodes %}
+        <img class="album-image" style="background-image: url({{ podcast.image }})">
+
+        <div class="episode">
+            <div class="episode-date">{{ podcast.timestamp.strftime('%Y-%m-%d') }}</div>
+            <p class="episode-name" style="margin-bottom: 5px"><a style="color: gray" href="{{ url_for('podcast_detail', id=podcast.podcast_id) }}">{{ podcast.body }}</a></b></p>
+            <p class="episode-name"><a style="color: black" href="{{ url_for('episode_detail', id=podcast.id) }}">{{ podcast.title }}</a></b></p>
+            <div class="episode-description">
+                {{ podcast.description }}
+            </div>
+            <div class="audio-player">
+                <a href="javascript:userListenEpisode(
+                            '{{ current_user.id}}',
+                            '{{ podcast.id }}'
+                        );">
+                    <div id={{ "play-btn" ~ loop.index }}></div>
+                </a>
+                <div class="audio-wrapper" id={{ "player-container" ~ loop.index }}>
+                    <audio id={{ "player" ~ loop.index }} ontimeupdate="initProgressBar({{ loop.index }})">
+                        <source src={{ podcast.audio_link }} type="audio/mp3">
+                    </audio>
+                </div>
+                <div class="player-controls scrubber">
+                    <span id="seekObjContainer">
+                          <progress id={{ "seekObj" ~ loop.index }} value="0" max="1"></progress>
+                      </span>
+                    <br>
+                    <small style="float: left; position: relative; left: 15px;" class={{ "start-time" ~ loop.index }}></small>
+                    <small style="float: right; position: relative; right: 20px;" class={{ "end-time" ~ loop.index }}></small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+<script src="{{url_for('static', filename='script.js')}}"></script>
+<script src="{{url_for('static', filename='episode.js')}}"></script>
+<script>
+        initPlayers($('[id^=player-container]').length)
+</script>
+</body>
+
+{% endblock %}
