@@ -213,9 +213,3 @@ def edit_profile():
         form.username.data = current_user.username
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form)
-
-@app.route('/photo')
-@login_required
-def get_photo():
-    current_user.photo
-

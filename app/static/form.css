@@ -1,0 +1,11 @@
+.form-screen {
+    border-left: 1px solid #DFDFDF;
+    border-right: 1px solid #DFDFDF;
+    border-bottom: 1px solid #DFDFDF;
+    border-top: 1px solid #DFDFDF;
+    background-color: #ffffff;
+}
+
+.form-content {
+    margin: 30px;
+}

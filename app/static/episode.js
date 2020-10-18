@@ -38,7 +38,7 @@ function commentDOM(username, message, isReply, id, photo){
     if ( !isReply){
         return '<div class="comment" id="comment' + id + '"> \
                 <a class="avatar"> \
-                    <img id="avatar-image" src=' + photo + ' /> \
+                    <img id="avatar-image" style="border-radius: 50%" src=' + photo + ' /> \
                 </a> \
                 <div class="content"> \
                     <a class="author">' + username + '</a> \
@@ -56,7 +56,7 @@ function commentDOM(username, message, isReply, id, photo){
     }
     return '<div class="comment"> \
                 <a class="avatar"> \
-                    <img id="avatar-image" src=' + photo + '/> \
+                    <img id="avatar-image" style="border-radius: 50%" src=' + photo + '/> \
                 </a> \
                 <div class="content"> \
                     <a class="author">' + username + '</a> \

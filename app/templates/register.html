@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
+<head>
+    <link rel="stylesheet" href="{{url_for('static', filename='form.css')}}">
+</head>
+
+<body>
+<div class="form-screen">
+    <div class="form-content">
     <h1>Register</h1>
     <form action="" method="post">
         {{ form.hidden_tag() }}
@@ -34,5 +41,8 @@
         </p>
         <p>{{ form.submit() }}</p>
     </form>
+    </div>
+</div>
 
+</body>
 {% endblock %}
