@@ -55,8 +55,6 @@ class User(UserMixin, db.Model):
         }
         return data
 
-
-
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -87,7 +85,22 @@ class User(UserMixin, db.Model):
         return self.podcasts
 
     def get_listened_episodes(self):
-        return self.episodes
+        return User.query.join(userEpisode).filter(User.id == self.id) \
+        .join(Episode) \
+        .join(Podcast) \
+        .add_columns(Podcast.body, Podcast.id.label("podcast_id"), Episode.timestamp, Episode.id.label("episode_id"),
+                     Episode.title,
+                     Episode.audio_link, Episode.image, Episode.description) \
+        .order_by(Episode.timestamp.desc())
+
+    def get_podcast_with_episodes(self, page):
+        return User.query.join(userPodcast).filter(User.id == self.id) \
+        .join(Podcast) \
+        .join(Episode) \
+        .add_columns(Podcast.body, Podcast.id.label("podcast_id"), Episode.timestamp, Episode.id, Episode.title,
+                     Episode.audio_link, Episode.image, Episode.description) \
+        .order_by(Episode.timestamp.desc()) \
+        .paginate(page, 5, False).items
 
     def __repr__(self):
         return '<User {}>'.format(self.username)

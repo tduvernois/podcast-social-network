@@ -1,7 +1,7 @@
 from app import app, db
 from flask import render_template, flash, redirect, url_for
 from app.forms import LoginForm
-from app.models import Podcast, User, Episode, Comment, userPodcast
+from app.models import Podcast, User, Episode, Comment, userPodcast, userEpisode
 from flask_login import current_user, login_user, login_required, logout_user
 from flask import request
 from werkzeug.urls import url_parse
@@ -105,15 +105,9 @@ def unfollow(id):
 def user(username):
     user = User.query.filter_by(username=username).first()
     podcasts = user.get_liked_podcasts()
-    listened_episodes = user.get_listened_episodes().order_by(Episode.timestamp.desc())
-    historical_data = []
-    # TODO: use sql join instead of in memory calculation
-    for e in listened_episodes.all():
-        podcast = e.get_podcast()
-        item = {"podcast": podcast, "episode": e}
-        historical_data.append(item)
+    listened_episodes = user.get_listened_episodes()
 
-    return render_template('user.html', user=user, podcasts=podcasts, historical_data=historical_data)
+    return render_template('user.html', user=user, podcasts=podcasts, listened_episodes=listened_episodes)
 
 
 @app.route('/listen', methods=['POST'])
@@ -136,7 +130,6 @@ def episode_detail(id):
     comments = Comment.query.filter_by(episode_id=id).order_by(Comment.timestamp.desc())
     comments_with_users = []
     comment_number = 0
-    # TODO: use sql join instead of in memory calculation
     for c in comments.all():
         comment_number = comment_number + 1
         replies_with_users = []
@@ -215,31 +208,22 @@ def edit_profile():
 @login_required
 def my_feed():
     page = request.args.get('page', 1, type=int)
-    podcast_with_episodes = current_user.query.join(userPodcast) \
-        .join(Podcast) \
-        .join(Episode) \
-        .add_columns(Podcast.body, Podcast.id.label("podcast_id"), Episode.timestamp, Episode.id, Episode.title,
-                     Episode.audio_link, Episode.image, Episode.description) \
-        .order_by(Episode.timestamp.desc()) \
-        .paginate(page, 5, False).items
-
-
+    podcast_with_episodes = current_user.get_podcast_with_episodes(page)
 
     if page == 1:
         return render_template('my_feed.html', podcast_with_episodes=podcast_with_episodes)
 
-    o = []
+    l = []
     for x in podcast_with_episodes:
-        o.append({ 'user': x.User.to_dict(),
-                   'podcast_id': x.podcast_id,
-                   'podcast_title': x.body,
-                   'timestamp': x.timestamp,
-                   'podcast_id': x.podcast_id,
-                   'episode_id': x.id,
-                   'episode_title': x.title,
-                   'audio_link': x.audio_link,
-                   'image': x.image,
-                   'description': x.description
-                   })
-    return jsonify(o)
-
+        l.append({'user': x.User.to_dict(),
+                  'podcast_id': x.podcast_id,
+                  'podcast_title': x.body,
+                  'timestamp': x.timestamp,
+                  'podcast_id': x.podcast_id,
+                  'episode_id': x.id,
+                  'episode_title': x.title,
+                  'audio_link': x.audio_link,
+                  'image': x.image,
+                  'description': x.description
+                  })
+    return jsonify(l)

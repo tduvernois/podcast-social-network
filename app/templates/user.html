@@ -33,17 +33,17 @@
             <div class="listening-history-title">Listening history</div>
 
 
-            {% for h in historical_data%}
+            {% for episode in listened_episodes%}
             <div class="listened-episode">
-                <img class="album-image" style="background-image: url({{ h.episode.image }})"></img>
+                <img class="album-image" style="background-image: url({{ episode.image }})"></img>
 
                 <div class="episode episode-from-profile">
-                    <div class="episode-date">{{ h.episode.timestamp.strftime('%Y-%m-%d') }}</div>
+                    <div class="episode-date">{{ episode.timestamp.strftime('%Y-%m-%d') }}</div>
                     <p class="episode-name">
-                        <a href="{{ url_for('podcast_detail', id=h.podcast.id) }}">{{ h.podcast.body }}</a>
+                        <a href="{{ url_for('podcast_detail', id=episode.podcast_id) }}">{{ episode.body }}</a>
                     </p>
                     <p>
-                        <a href="{{ url_for('episode_detail', id=h.episode.id) }}">{{ h.episode.title }}</a>
+                        <a href="{{ url_for('episode_detail', id=episode.episode_id) }}">{{ episode.title }}</a>
                     </p>
                 </div>
             </div>
