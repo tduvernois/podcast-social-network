@@ -6,7 +6,6 @@ from app import login
 import os
 from app import app, db
 
-
 userPodcast = db.Table('UserPodcast',
                        db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
                        db.Column('podcast_id', db.Integer, db.ForeignKey('podcast.id'), primary_key=True)
@@ -18,16 +17,64 @@ userEpisode = db.Table('UserEpisode',
                        )
 
 replies = db.Table('replies',
-    db.Column('original', db.Integer, db.ForeignKey('comment.id')),
-    db.Column('reply', db.Integer, db.ForeignKey('comment.id'))
-)
+                   db.Column('original', db.Integer, db.ForeignKey('comment.id')),
+                   db.Column('reply', db.Integer, db.ForeignKey('comment.id'))
+                   )
 
 
 def default_avatar():
     return 'default.png'
 
+
+
+from app.search import add_to_index, remove_from_index, query_index
+
+
+class SearchableMixin(object):
+    @classmethod
+    def search(cls, expression, page, per_page):
+        ids, total = query_index(cls.__tablename__, expression, page, per_page)
+        if total == 0:
+            return cls.query.filter_by(id=0), 0
+        when = []
+        for i in range(len(ids)):
+            when.append((ids[i], i))
+        return cls.query.filter(cls.id.in_(ids)).order_by(
+            db.case(when, value=cls.id)), total
+
+    @classmethod
+    def before_commit(cls, session):
+        session._changes = {
+            'add': list(session.new),
+            'update': list(session.dirty),
+            'delete': list(session.deleted)
+        }
+
+    @classmethod
+    def after_commit(cls, session):
+        for obj in session._changes['add']:
+            if isinstance(obj, SearchableMixin):
+                add_to_index(obj.__tablename__, obj)
+        for obj in session._changes['update']:
+            if isinstance(obj, SearchableMixin):
+                add_to_index(obj.__tablename__, obj)
+        for obj in session._changes['delete']:
+            if isinstance(obj, SearchableMixin):
+                remove_from_index(obj.__tablename__, obj)
+        session._changes = None
+
+    @classmethod
+    def reindex(cls):
+        for obj in cls.query:
+            add_to_index(cls.__tablename__, obj)
+
+
+db.event.listen(db.session, 'before_commit', SearchableMixin.before_commit)
+db.event.listen(db.session, 'after_commit', SearchableMixin.after_commit)
+
+
 # inherit from UserMixin for flask-login
-class User(UserMixin, db.Model):
+class User(SearchableMixin, UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
@@ -40,13 +87,14 @@ class User(UserMixin, db.Model):
                                # primaryjoin=(userEpisode.c.user_id == id),
                                backref=db.backref('user')
                                )
+    __searchable__ = ['username']
 
     photo = db.Column(db.String(200), default=default_avatar())
 
     def avatar(self, size):
         if self.photo is not None:
             return os.path.join(
-            app.config['PHOTO_PATH'], self.photo)
+                app.config['PHOTO_PATH'], self.photo)
 
     def to_dict(self):
         data = {
@@ -86,21 +134,22 @@ class User(UserMixin, db.Model):
 
     def get_listened_episodes(self):
         return User.query.join(userEpisode).filter(User.id == self.id) \
-        .join(Episode) \
-        .join(Podcast) \
-        .add_columns(Podcast.body, Podcast.id.label("podcast_id"), Episode.timestamp, Episode.id.label("episode_id"),
-                     Episode.title,
-                     Episode.audio_link, Episode.image, Episode.description) \
-        .order_by(Episode.timestamp.desc())
+            .join(Episode) \
+            .join(Podcast) \
+            .add_columns(Podcast.body, Podcast.id.label("podcast_id"), Episode.timestamp,
+                         Episode.id.label("episode_id"),
+                         Episode.title,
+                         Episode.audio_link, Episode.image, Episode.description) \
+            .order_by(Episode.timestamp.desc())
 
     def get_podcast_with_episodes(self, page):
         return User.query.join(userPodcast).filter(User.id == self.id) \
-        .join(Podcast) \
-        .join(Episode) \
-        .add_columns(Podcast.body, Podcast.id.label("podcast_id"), Episode.timestamp, Episode.id, Episode.title,
-                     Episode.audio_link, Episode.image, Episode.description) \
-        .order_by(Episode.timestamp.desc()) \
-        .paginate(page, 5, False).items
+            .join(Podcast) \
+            .join(Episode) \
+            .add_columns(Podcast.body, Podcast.id.label("podcast_id"), Episode.timestamp, Episode.id, Episode.title,
+                         Episode.audio_link, Episode.image, Episode.description) \
+            .order_by(Episode.timestamp.desc()) \
+            .paginate(page, 5, False).items
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -144,6 +193,7 @@ class Episode(db.Model):
     def get_podcast(self):
         return Podcast.query.get(self.podcast_id)
 
+
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(140))
@@ -167,3 +217,4 @@ class Comment(db.Model):
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+

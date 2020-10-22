@@ -8,6 +8,15 @@ from werkzeug.urls import url_parse
 from app.forms import RegistrationForm
 from app.forms import EmptyForm
 from flask import jsonify
+# g variable provided by Flask is a place where the application can store data that needs to persist through the life of a request
+from flask import g
+from app.forms import SearchForm
+
+
+@app.before_request
+def before_request():
+    if current_user.is_authenticated:
+        g.search_form = SearchForm()
 
 
 @app.route('/')
@@ -227,3 +236,19 @@ def my_feed():
                   'description': x.description
                   })
     return jsonify(l)
+
+
+@app.route('/search')
+@login_required
+def search():
+    if not g.search_form.validate():
+        return redirect(url_for('index'))
+    page = request.args.get('page', 1, type=int)
+    users, total = User.search(g.search_form.q.data, page,
+                               app.config['USERS_PER_PAGE'])
+    next_url = url_for('search', q=g.search_form.q.data, page=page + 1) \
+        if total > page * app.config['USERS_PER_PAGE'] else None
+    prev_url = url_for('search', q=g.search_form.q.data, page=page - 1) \
+        if page > 1 else None
+    return render_template('search.html', title='Search', users=users,
+                           next_url=next_url, prev_url=prev_url)
