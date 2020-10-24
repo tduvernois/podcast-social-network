@@ -1,0 +1,29 @@
+.profile-image {
+     max-width: 75px;
+    border-radius: 50%;
+}
+
+.user-info {
+    display: flex;
+}
+
+.user-info a {
+    margin: auto 0 auto 20px;
+}
+
+#search-title {
+    margin-bottom: 30px;
+}
+
+#results {
+    margin-bottom: 30px;
+}
+
+#search {
+    border-left: 1px solid #DFDFDF;
+    border-right: 1px solid #DFDFDF;
+    border-bottom: 1px solid #DFDFDF;
+    border-top: 1px solid #DFDFDF;
+    background-color: #ffffff;
+    padding: 5%;
+}
