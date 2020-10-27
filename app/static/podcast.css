@@ -214,4 +214,9 @@ div[id^='play-btn'], div[id*='play-btn'] {
   }
 }
 
+#FollowButton {
+    padding: 0;
+    margin-bottom: 15px;
+}
+
 

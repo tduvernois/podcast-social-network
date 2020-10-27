@@ -140,3 +140,8 @@ form[form^='reply-form'], form[id*='reply-form'] {
   max-width: 60%;
 
 }
+
+#RetweetButton {
+    padding: 0;
+    margin-bottom: 15px;
+}

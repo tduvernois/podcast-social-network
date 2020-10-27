@@ -171,3 +171,32 @@ function deleteContentNewCommentPlaceHolder(){
     $('.input-new-comment')[0].value = ""
 }
 
+function RetweetEpisode(userId, episodeId, hasAlreadyTweeted){
+
+    if ( hasAlreadyTweeted == true || hasAlreadyTweeted == 'True'){
+        $.post('/cancel_retweet', { 'episodeId': episodeId})
+        .done(function(response) {
+            console.log("it worked")
+        }).fail(function() {
+            console.log("error")
+        });
+//        $('#numberFollowers').text(parseInt(followers) - 1 + ' followers');
+        let html = '<a href="javascript:RetweetEpisode('
+                                + userId + ',' + episodeId + ', false' +
+                            ");\" ><button class='btn btn-default'>Retweet</button></a>";
+        $('#RetweetButton').html(html);
+    }
+    else{
+        $.post('/retweet', { 'episodeId': episodeId})
+        .done(function(response) {
+            console.log("it worked")
+        }).fail(function() {
+            console.log("error")
+        });
+//        $('#numberFollowers').text(parseInt(followers) + 1 + ' followers');
+        let html = '<a href="javascript:RetweetEpisode('
+                                + userId + ',' + episodeId + ', true' +
+                            ");\" ><button class='btn btn-default'>Cancel Retweet</button></a>";
+        $('#RetweetButton').html(html);
+    }
+}

@@ -11,7 +11,7 @@
         <div style="margin-left: 40px">
             <h1>{{ user.username }}</h1>
             {% if user != current_user %}
-            <div id='FollowButton'>
+            <div id='FollowButton' class="ui button">
                 <a href="javascript:FollowUser(
                                 '{{ user.id }}',
                                 '{{ user.id }}',

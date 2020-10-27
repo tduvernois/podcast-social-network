@@ -16,6 +16,11 @@ userEpisode = db.Table('UserEpisode',
                        db.Column('episode_id', db.Integer, db.ForeignKey('episode.id'), primary_key=True)
                        )
 
+userEpisodeRetweet = db.Table('UserEpisodeRetweet',
+                       db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+                       db.Column('episode_id', db.Integer, db.ForeignKey('episode.id'), primary_key=True)
+                       )
+
 replies = db.Table('replies',
                    db.Column('original', db.Integer, db.ForeignKey('comment.id')),
                    db.Column('reply', db.Integer, db.ForeignKey('comment.id'))
@@ -91,6 +96,9 @@ class User(SearchableMixin, UserMixin, db.Model):
                                # primaryjoin=(userEpisode.c.user_id == id),
                                backref=db.backref('user')
                                )
+    retweet_episodes = db.relationship('Episode', secondary=userEpisodeRetweet, lazy='dynamic',
+                               backref=db.backref('retweet_user')
+                               )
     __searchable__ = ['username']
     photo = db.Column(db.String(200), default=default_avatar())
     followed = db.relationship(
@@ -110,6 +118,18 @@ class User(SearchableMixin, UserMixin, db.Model):
     def is_following_user(self, user):
         return self.followed.filter(
             followers.c.followed_id == user.id).count() > 0
+
+    def retweet_episode(self, episode):
+        if not self.has_retweeted_episode(episode):
+            self.retweet_episodes.append(episode)
+
+    def cancel_retweet_episode(self, episode):
+        if self.has_retweeted_episode(episode):
+            self.retweet_episodes.remove(episode)
+
+    def has_retweeted_episode(self, episode):
+        return self.retweet_episodes.filter(
+            userEpisodeRetweet.c.episode_id == episode.id).count() > 0
 
     def avatar(self, size):
         if self.photo is not None:
@@ -209,6 +229,8 @@ class Episode(db.Model):
     description = db.Column(db.String(5000))
     image = db.Column(db.String(500))
     users = db.relationship('User', secondary=userEpisode, lazy='dynamic')
+    retweet_users = db.relationship('User', secondary=userEpisodeRetweet, lazy='dynamic')
+
 
     def get_podcast(self):
         return Podcast.query.get(self.podcast_id)

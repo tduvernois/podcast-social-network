@@ -11,6 +11,24 @@
         <div class="episode">
             <div class="episode-date">{{ episode.timestamp.strftime('%Y-%m-%d') }}</div>
             <p class="episode-name">{{ episode.title }}</b></p>
+
+            <div id='RetweetButton' class="ui button">
+                <a href="javascript:RetweetEpisode(
+                                '{{ current_user.id }}',
+                                '{{ episode.id }}',
+                                '{{ current_user.has_retweeted_episode(episode) }}'
+                            );">
+                    <button class='btn btn-default'>
+                        {% if not current_user.has_retweeted_episode(episode) %}
+                        Retweet
+                        {% else %}
+                        Delete retweet
+                        {% endif %}
+                    </button>
+                </a>
+            </div>
+
+
             <div class="episode-description">
                 {{ episode.description }}
             </div>

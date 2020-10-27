@@ -53,3 +53,8 @@ div.episode-from-profile p {
 .personal-info {
     display: flex
 }
+
+#FollowButton {
+    padding: 0;
+    margin-bottom: 15px;
+}

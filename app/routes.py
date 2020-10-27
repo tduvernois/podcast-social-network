@@ -270,3 +270,23 @@ def unfollow_user(user_id):
     current_user.unfollow_user(user)
     db.session.commit()
     return jsonify({'status': 'success'})
+
+
+@app.route('/retweet', methods=['POST'])
+@login_required
+def retweet():
+    episode_id = request.form['episodeId']
+    episode = Episode.query.filter_by(id=episode_id).first()
+    current_user.retweet_episode(episode)
+    db.session.commit()
+    return jsonify({'status': 'success'})
+
+
+@app.route('/cancel_retweet', methods=['POST'])
+@login_required
+def cancel_retweet():
+    episode_id = request.form['episodeId']
+    episode = Episode.query.filter_by(id=episode_id).first()
+    current_user.cancel_retweet_episode(episode)
+    db.session.commit()
+    return jsonify({'status': 'success'})
