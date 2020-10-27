@@ -252,3 +252,21 @@ def search():
         if page > 1 else None
     return render_template('search.html', title='Search', users=users,
                            next_url=next_url, prev_url=prev_url)
+
+
+@app.route('/follow_user/<user_id>', methods=['POST'])
+@login_required
+def follow_user(user_id):
+    user = User.query.filter_by(id=user_id).first()
+    current_user.follow_user(user)
+    db.session.commit()
+    return jsonify({'status': 'success'})
+
+
+@app.route('/unfollow_user/<user_id>', methods=['POST'])
+@login_required
+def unfollow_user(user_id):
+    user = User.query.filter_by(id=user_id).first()
+    current_user.unfollow_user(user)
+    db.session.commit()
+    return jsonify({'status': 'success'})

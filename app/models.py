@@ -21,10 +21,14 @@ replies = db.Table('replies',
                    db.Column('reply', db.Integer, db.ForeignKey('comment.id'))
                    )
 
+followers = db.Table('followers',
+                     db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
+                     db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
+                     )
+
 
 def default_avatar():
     return 'default.png'
-
 
 
 from app.search import add_to_index, remove_from_index, query_index
@@ -88,8 +92,24 @@ class User(SearchableMixin, UserMixin, db.Model):
                                backref=db.backref('user')
                                )
     __searchable__ = ['username']
-
     photo = db.Column(db.String(200), default=default_avatar())
+    followed = db.relationship(
+        'User', secondary=followers,
+        primaryjoin=(followers.c.follower_id == id),
+        secondaryjoin=(followers.c.followed_id == id),
+        backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
+
+    def follow_user(self, user):
+        if not self.is_following_user(user):
+            self.followed.append(user)
+
+    def unfollow_user(self, user):
+        if self.is_following_user(user):
+            self.followed.remove(user)
+
+    def is_following_user(self, user):
+        return self.followed.filter(
+            followers.c.followed_id == user.id).count() > 0
 
     def avatar(self, size):
         if self.photo is not None:
@@ -217,4 +237,3 @@ class Comment(db.Model):
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
-

@@ -10,6 +10,24 @@
         <div><img id="profile-image" src="{{url_for('static', filename='images/photos/' + user.photo)}}"></div>
         <div style="margin-left: 40px">
             <h1>{{ user.username }}</h1>
+            {% if user != current_user %}
+            <div id='FollowButton'>
+                <a href="javascript:FollowUser(
+                                '{{ user.id }}',
+                                '{{ user.id }}',
+                                '{{ current_user.is_following_user(user) }}'
+                            );">
+                    <button class='btn btn-default'>
+                        {% if not current_user.is_following_user(user) %}
+                        Follow
+                        {% else %}
+                        Unfollow
+                        {% endif %}
+                    </button>
+                </a>
+            </div>
+            {% endif %}
+
             {% if user == current_user %}
             <p><a href="{{ url_for('edit_profile') }}">Edit your profile</a></p>
             {% endif %}
@@ -51,7 +69,7 @@
 
         </div>
     </div>
-
+    <script src="{{url_for('static', filename='user.js')}}"></script>
 </body>
 
 {% endblock %}
