@@ -12,4 +12,5 @@ class Config(object):
     PHOTO_PATH_STATIC = '/static/images/photos'
     ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
     USERS_PER_PAGE = int(os.environ.get('USERS_PER_PAGE'))
+    LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
 
