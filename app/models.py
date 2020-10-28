@@ -100,7 +100,8 @@ class User(SearchableMixin, UserMixin, db.Model):
                                backref=db.backref('retweet_user')
                                )
     __searchable__ = ['username']
-    photo = db.Column(db.String(200), default=default_avatar())
+    #photo = db.Column(db.String(200), default=default_avatar())
+    photo = db.Column(db.String(200))
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
