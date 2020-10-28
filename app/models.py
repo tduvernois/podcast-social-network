@@ -191,6 +191,16 @@ class User(SearchableMixin, UserMixin, db.Model):
             .order_by(Episode.timestamp.desc()) \
             .paginate(page, 5, False).items
 
+    def get_friends_tweeted_episodes(self, page):
+        return User.query.join(followers, User.id == followers.c.followed_id).filter(followers.c.follower_id == self.id) \
+            .join(userEpisodeRetweet) \
+            .join(Episode) \
+            .join(Podcast) \
+            .add_columns(Podcast.body, Podcast.id.label("podcast_id"), Episode.timestamp, Episode.id, Episode.title,
+                         Episode.audio_link, Episode.image, Episode.description) \
+            .order_by(Episode.timestamp.desc()) \
+            .paginate(page, 5, False).items
+
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
@@ -230,7 +240,6 @@ class Episode(db.Model):
     image = db.Column(db.String(500))
     users = db.relationship('User', secondary=userEpisode, lazy='dynamic')
     retweet_users = db.relationship('User', secondary=userEpisodeRetweet, lazy='dynamic')
-
 
     def get_podcast(self):
         return Podcast.query.get(self.podcast_id)

@@ -290,3 +290,28 @@ def cancel_retweet():
     current_user.cancel_retweet_episode(episode)
     db.session.commit()
     return jsonify({'status': 'success'})
+
+
+@app.route('/social_feed')
+@login_required
+def social_feed():
+    page = request.args.get('page', 1, type=int)
+    podcast_with_episodes = current_user.get_friends_tweeted_episodes(page)
+
+    if page == 1:
+        return render_template('social_feed.html', podcast_with_episodes=podcast_with_episodes)
+
+    l = []
+    for x in podcast_with_episodes:
+        l.append({'user': x.User.to_dict(),
+                  'podcast_id': x.podcast_id,
+                  'podcast_title': x.body,
+                  'timestamp': x.timestamp,
+                  'podcast_id': x.podcast_id,
+                  'episode_id': x.id,
+                  'episode_title': x.title,
+                  'audio_link': x.audio_link,
+                  'image': x.image,
+                  'description': x.description
+                  })
+    return jsonify(l)
