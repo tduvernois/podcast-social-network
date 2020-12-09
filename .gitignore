@@ -157,3 +157,4 @@ fabric.properties
 key-ec2.pem
 logs/
 notes.md
+.env_gunicorn.py

@@ -80,14 +80,14 @@ function initPlayers(num) {
           $('#play-btn' + j).removeClass('pause');
 
             $('#play-btn' + j).css({
-            'background-image': 'url("http://www.lukeduncan.me/images/play-button.png")'
+            'background-image': 'url("../static/images/play-button.png")'
            });
 
         } else {
           player.play();
           $('#play-btn' + j).addClass('pause');
             $('#play-btn' + j).css({
-            'background-image': 'url("http://www.lukeduncan.me/images/pause-button.png")'
+            'background-image': 'url("../static/images/pause-button.png")'
            });
           isPlaying = true;
         }
