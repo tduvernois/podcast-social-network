@@ -255,7 +255,7 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     message = db.Column(db.String(5000))
-    episode_time = db.Column(db.Integer)
+    # episode_time = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     episode_id = db.Column(db.Integer, db.ForeignKey('episode.id'), nullable=True)
     reply = db.relationship(

@@ -164,9 +164,8 @@ def episode_detail(id):
 def comments():
     user_id = current_user.id
     episode_id = request.form['episodeId']
-    episode_time = request.form['episodeTime']
     message = request.form['message']
-    comment = Comment(user_id=user_id, episode_id=episode_id, episode_time=episode_time, message=message)
+    comment = Comment(user_id=user_id, episode_id=episode_id, message=message)
     db.session.add(comment)
     db.session.commit()
     return jsonify({'status': 'success', 'commentId': comment.id})
