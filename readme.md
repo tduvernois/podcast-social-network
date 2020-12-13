@@ -1,10 +1,29 @@
-#### migrate the database
+## Podcast application
 
-* (venv) $ flask db migrate -m "followers"
-* (venv) $ flask db upgrade
+Flask application where users can listen to podcasts and find their friends recommendations.
 
-#### test users
+Go to https://shareyourbestpodcast.com/
 
-dudu:dudu
 
-thomas:thomas
+
+### Set up before running the application
+
+create `gunicorn_setup.py` and add the configuration:
+
+```
+raw_env = [
+    "SECRET_KEY=<SECRET_KEY>",
+    "DATABASE_URL=<DATABASE_URL>",
+    "ELASTICSEARCH_URL=<ELASTICSEARCH_URL>",
+    "USERS_PER_PAGE=5",
+    "PHOTO_PATH=<APP_PATH>/app/static/images/photos"
+    ]
+```
+### Run the app
+
+Run then application with :
+
+```
+gunicorn -c gunicorn_setup.py -b localhost:<APPLICATION_PORT> -w 4 podcast_social_network:app &
+```
+
