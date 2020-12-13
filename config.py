@@ -8,7 +8,7 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
                               'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    PHOTO_PATH = '/Users/thomasduvernois/python/flask/podcast-project/app/static/images/photos'
+    PHOTO_PATH = os.environ.get('PHOTO_PATH')
     PHOTO_PATH_STATIC = '/static/images/photos'
     ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
     USERS_PER_PAGE = int(os.environ.get('USERS_PER_PAGE'))
